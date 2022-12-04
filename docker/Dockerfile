@@ -1,27 +1,23 @@
-FROM nvidia/cuda:10.2-devel-ubuntu18.04
+FROM pytorch/pytorch:1.7.1-cuda11.0-cudnn8-devel
 
-RUN apt-get update && apt-get install -y libglib2.0-0 && apt-get clean
+RUN apt-get update && apt-get install -y libgl1-mesa-glx libglib2.0-dev git vim
 
-RUN apt-get install -y wget htop byobu git gcc g++ vim libsm6 libxext6 libxrender-dev lsb-core
+RUN pip install ipdb jupyter ipython opencv-python
+RUN pip install detectron2 -f https://dl.fbaipublicfiles.com/detectron2/wheels/cu110/torch1.7/index.html
 
-RUN cd /root && wget https://repo.anaconda.com/archive/Anaconda3-2020.07-Linux-x86_64.sh
+ENV TORCH_CUDA_ARCH_LIST="8.0"
+ENV CUDA_HOME="/usr/local/cuda"
+ENV FORCE_CUDA="1"
+RUN git clone https://github.com/aim-uofa/AdelaiDet.git
+RUN cd AdelaiDet && python setup.py build develop
 
-RUN cd /root && bash Anaconda3-2020.07-Linux-x86_64.sh -b -p ./anaconda3
+#RUN rm -rf AdelaiDet
+RUN rm -rf /var/lib/apt/lists/*
+RUN rm -rf /tmp/*
+RUN rm -rf ~/.cache
+RUN apt clean all
+RUN conda clean -y -a
 
-RUN bash -c "source /root/anaconda3/etc/profile.d/conda.sh && conda install -y pytorch==1.5.0 torchvision cudatoolkit=10.2 -c pytorch"
-
-RUN bash -c "/root/anaconda3/bin/conda init bash"
-
-WORKDIR /root
-RUN mkdir code
-WORKDIR code
-
-RUN git clone https://github.com/facebookresearch/detectron2.git
-RUN bash -c "source /root/anaconda3/etc/profile.d/conda.sh && conda activate base && cd detectron2 && python setup.py build develop"
-
-RUN git clone https://github.com/aim-uofa/AdelaiDet.git adet
-
-WORKDIR adet
-RUN bash -c "source /root/anaconda3/etc/profile.d/conda.sh && conda activate base && python setup.py build develop"
-
-RUN rm /root/Anaconda3-2020.07-Linux-x86_64.sh
+EXPOSE 8888
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8

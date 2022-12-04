@@ -1,239 +1,215 @@
-<div align="center">
-    <img src="docs/adel-logo.svg" width="160" >
-</div>
+# ABINet++: Autonomous, Bidirectional and Iterative Language Modeling for Scene Text Spotting
 
-#  AdelaiDet
+The official code of [ABINet++](https://arxiv.org/pdf/2211.10578.pdf).
 
-AdelaiDet is an open source toolbox for multiple instance-level recognition tasks on top of [Detectron2](https://github.com/facebookresearch/detectron2).
-All instance-level recognition works from our group are open-sourced here.
-
-To date, AdelaiDet implements the following algorithms:
-
-* [FCOS](configs/FCOS-Detection/README.md)
-* [BlendMask](configs/BlendMask/README.md)
-* [MEInst](configs/MEInst-InstanceSegmentation/README.md)
-* [ABCNet](configs/BAText/README.md)
-* [CondInst](configs/CondInst/README.md)
-* [SOLO](https://arxiv.org/abs/1912.04488) ([mmdet version](https://github.com/WXinlong/SOLO))
-* [SOLOv2](configs/SOLOv2/README.md)
-* [BoxInst](configs/BoxInst/README.md) ([video demo](https://www.youtube.com/watch?v=NuF8NAYf5L8))
-* [DirectPose](https://arxiv.org/abs/1911.07451) _to be released_
+![framework](./figs/framework.png)
 
 
+## Runtime Environment
 
-
-## Models
-### COCO Object Detecton Baselines with [FCOS](https://arxiv.org/abs/1904.01355)
-Name | inf. time | box AP | download
---- |:---:|:---:|:---
-[FCOS_R_50_1x](configs/FCOS-Detection/R_50_1x.yaml) | 16 FPS | 38.7 | [model](https://cloudstor.aarnet.edu.au/plus/s/glqFc13cCoEyHYy/download)
-[FCOS_MS_R_101_2x](configs/FCOS-Detection/MS_R_101_2x.yaml) | 12 FPS | 43.1 | [model](https://cloudstor.aarnet.edu.au/plus/s/M3UOT6JcyHy2QW1/download)
-[FCOS_MS_X_101_32x8d_2x](configs/FCOS-Detection/MS_X_101_32x8d_2x.yaml) | 6.6 FPS | 43.9 | [model](https://cloudstor.aarnet.edu.au/plus/s/R7H00WeWKZG45pP/download)
-[FCOS_MS_X_101_32x8d_dcnv2_2x](configs/FCOS-Detection/MS_X_101_32x8d_2x_dcnv2.yaml) | 4.6 FPS | 46.6 | [model](https://cloudstor.aarnet.edu.au/plus/s/TDsnYK8OXDTrafF/download)
-[FCOS_RT_MS_DLA_34_4x_shtw](configs/FCOS-Detection/FCOS_RT/MS_DLA_34_4x_syncbn_shared_towers.yaml) | 52 FPS | 39.1 | [model](https://cloudstor.aarnet.edu.au/plus/s/4vc3XwQezyhNvnB/download)
-
-More models can be found in FCOS [README.md](configs/FCOS-Detection/README.md).
-
-### COCO Instance Segmentation Baselines with [BlendMask](https://arxiv.org/abs/2001.00309)
-
-Model | Name |inf. time | box AP | mask AP | download
---- |:---:|:---:|:---:|:---:|:---:
-Mask R-CNN | [R_101_3x](https://github.com/facebookresearch/detectron2/blob/master/configs/COCO-InstanceSegmentation/mask_rcnn_R_101_FPN_3x.yaml) | 10 FPS | 42.9 | 38.6 |
-BlendMask | [R_101_3x](configs/BlendMask/R_101_3x.yaml) | 11 FPS | 44.8 | 39.5 | [model](https://cloudstor.aarnet.edu.au/plus/s/e4fXrliAcMtyEBy/download)
-BlendMask | [R_101_dcni3_5x](configs/BlendMask/R_101_dcni3_5x.yaml) | 10 FPS | 46.8 | 41.1 | [model](https://cloudstor.aarnet.edu.au/plus/s/vbnKnQtaGlw8TKv/download)
-
-For more models and information, please refer to BlendMask [README.md](configs/BlendMask/README.md).
-
-### COCO Instance Segmentation Baselines with [MEInst](https://arxiv.org/abs/2003.11712)
-
-Name | inf. time | box AP | mask AP | download
---- |:---:|:---:|:---:|:---:
-[MEInst_R_50_3x](https://github.com/aim-uofa/AdelaiDet/configs/MEInst-InstanceSegmentation/MEInst_R_50_3x.yaml) | 12 FPS | 43.6 | 34.5 | [model](https://cloudstor.aarnet.edu.au/plus/s/1ID0DeuI9JsFQoG/download)
-
-For more models and information, please refer to MEInst [README.md](configs/MEInst-InstanceSegmentation/README.md).
-
-### Total_Text results with [ABCNet](https://arxiv.org/abs/2002.10200)
-
-Name | inf. time | e2e-hmean | det-hmean | download
----  |:---------:|:---------:|:---------:|:---:
-[attn_R_50](configs/BAText/TotalText/attn_R_50.yaml) | 11 FPS | 67.1 | 86.0 | [model](https://cloudstor.aarnet.edu.au/plus/s/t2EFYGxNpKPUqhc/download)
-
-For more models and information, please refer to ABCNet [README.md](configs/BAText/README.md).
-
-### COCO Instance Segmentation Baselines with [CondInst](https://arxiv.org/abs/2003.05664)
-
-Name | inf. time | box AP | mask AP | download
---- |:---:|:---:|:---:|:---:
-[CondInst_MS_R_50_1x](configs/CondInst/MS_R_50_1x.yaml) | 14 FPS | 39.7 | 35.7 | [model](https://cloudstor.aarnet.edu.au/plus/s/Trx1r4tLJja7sLT/download)
-[CondInst_MS_R_50_BiFPN_3x_sem](configs/CondInst/MS_R_50_BiFPN_3x_sem.yaml) | 13 FPS | 44.7 | 39.4 | [model](https://cloudstor.aarnet.edu.au/plus/s/9cAHjZtdaAGnb2Q/download)
-[CondInst_MS_R_101_3x](configs/CondInst/MS_R_101_3x.yaml) | 11 FPS | 43.3 | 38.6 | [model](https://cloudstor.aarnet.edu.au/plus/s/vWLiYm8OnrTSUD2/download)
-[CondInst_MS_R_101_BiFPN_3x_sem](configs/CondInst/MS_R_101_BiFPN_3x_sem.yaml) | 10 FPS | 45.7 | 40.2 | [model](https://cloudstor.aarnet.edu.au/plus/s/2p1ashxl54Su8vv/download)
-
-For more models and information, please refer to CondInst [README.md](configs/CondInst/README.md).
-
-Note that:
-- Inference time for all projects is measured on a NVIDIA 1080Ti with batch size 1.
-- APs are evaluated on COCO2017 val split unless specified.
-
-
-## Installation
-
-First install Detectron2 following the official guide: [INSTALL.md](https://github.com/facebookresearch/detectron2/blob/master/INSTALL.md).
-
-*Please use Detectron2 with commit id [9eb4831](https://github.com/facebookresearch/detectron2/commit/9eb4831f742ae6a13b8edb61d07b619392fb6543) if you have any issues related to Detectron2.*
-
-Then build AdelaiDet with:
+- Use the pre-built docker image as follows:
 
 ```
-git clone https://github.com/aim-uofa/AdelaiDet.git
-cd AdelaiDet
-python setup.py build develop
+$ git@github.com:FangShancheng/ABINet-PP.git
+$ docker run --gpus all --rm -ti --shm-size=128g --ipc=host -v "$(pwd)"/ABINet-PP:/workspace/ABINet-PP fangshancheng/adet /bin/bash
+$ cd ABINet-PP
+$ python setup.py build develop
+```
+- Or build your custom environment from `docker/Dockerfile`
+
+## Datasets
+
+Training and evaluation datasets should be placed in `datasets` folder: 
+```
+datasets
+├── syntext1
+├── syntext2
+├── mlt2017
+├── totaltext
+├── CTW1500
+├── icdar2015
+├── ChnSyn
+├── ReCTS
+├── LSVT
+├── ArT
+├── evaluation
+│   ├── gt_ctw1500.zip
+│   ├── gt_icdar2015.zip
+│   └── gt_totaltext.zip
+└── WikiText-103-n96.csv
 ```
 
-If you are using docker, a pre-built image can be pulled with:
+[Here](https://github.com/aim-uofa/AdelaiDet/tree/master/datasets), a more detailed description of these datasets, and the download links can be found from [AdelaiDet](https://github.com/aim-uofa/AdelaiDet/). Additional links include  [WikiText-103-n96.csv](https://drive.google.com/file/d/1izmMP0xYrW-RbYo6C9jootFV-cHBmN0_/view), and [gt_icdar2015.zip](https://drive.google.com/file/d/1POVxA74GcK5PMxIFhd54RdNMusyIZ1Bc/view?usp=share_link) (a compatible format for this repository.)
 
-```
-docker pull tianzhi0549/adet:latest
-```
+## Pretrained Models
 
-Some projects may require special setup, please follow their own `README.md` in [configs](configs).
+- English recognition:
+    - [model_pretrain.pth](https://drive.google.com/file/d/1p6Pw053fFtwmOWd7Qiw3w4qYKf13-bDg/view?usp=share_link)
+    - [model_ctw1500.pth](https://drive.google.com/file/d/1yKQTaXbPimKvY54K677XSB1Ps9xPE_c0/view?usp=share_link)
+    - [model_icdar2015.pth](https://drive.google.com/file/d/1pZZC9vvMF1Wjz5_BPw1d64qKMm8la6L5/view?usp=share_link)
+    - [model_totaltext.pth](https://drive.google.com/file/d/1hT5uZDnQAfPK2T-Ef6pBYoJj1iidqxGh/view?usp=share_link)
 
-## Quick Start
-
-### Inference with Pre-trained Models
-
-1. Pick a model and its config file, for example, `fcos_R_50_1x.yaml`.
-2. Download the model `wget https://cloudstor.aarnet.edu.au/plus/s/glqFc13cCoEyHYy/download -O fcos_R_50_1x.pth`
-3. Run the demo with
-```
-python demo/demo.py \
-    --config-file configs/FCOS-Detection/R_50_1x.yaml \
-    --input input1.jpg input2.jpg \
-    --opts MODEL.WEIGHTS fcos_R_50_1x.pth
-```
-
-### Train Your Own Models
-
-To train a model with "train_net.py", first
-setup the corresponding datasets following
-[datasets/README.md](https://github.com/facebookresearch/detectron2/blob/master/datasets/README.md),
-then run:
-
-```
-OMP_NUM_THREADS=1 python tools/train_net.py \
-    --config-file configs/FCOS-Detection/R_50_1x.yaml \
-    --num-gpus 8 \
-    OUTPUT_DIR training_dir/fcos_R_50_1x
-```
-To evaluate the model after training, run:
-
-```
-OMP_NUM_THREADS=1 python tools/train_net.py \
-    --config-file configs/FCOS-Detection/R_50_1x.yaml \
-    --eval-only \
-    --num-gpus 8 \
-    OUTPUT_DIR training_dir/fcos_R_50_1x \
-    MODEL.WEIGHTS training_dir/fcos_R_50_1x/model_final.pth
-```
-Note that:
-- The configs are made for 8-GPU training. To train on another number of GPUs, change the `--num-gpus`.
-- If you want to measure the inference time, please change `--num-gpus` to 1.
-- We set `OMP_NUM_THREADS=1` by default, which achieves the best speed on our machines, please change it as needed.
-- This quick start is made for FCOS. If you are using other projects, please check the projects' own `README.md` in [configs](configs). 
+- Chinese recognition:
+    - [model_pretrain_chn.pth](https://drive.google.com/file/d/1p6Pw053fFtwmOWd7Qiw3w4qYKf13-bDg/view?usp=share_link)
+    - [model_rects.pth](https://drive.google.com/file/d/1hT5uZDnQAfPK2T-Ef6pBYoJj1iidqxGh/view?usp=share_link)
 
 
-## Acknowledgements
+## Training
 
-The authors are grateful to
-Nvidia, Huawei Noah's Ark Lab, ByteDance, Adobe who generously donated GPU computing in the past a few years.
+### English recognition
 
-## Citing AdelaiDet
+* Pretrainining:
+    ```
+    CUDA_VISIBLE_DEVICES=0,1,2,3 python tools/train_net.py \
+        --config-file configs/ABINet/Pretrain.yaml \
+        --num-gpus 4
+    ```
 
-If you use this toolbox in your research or wish to refer to the baseline results published here, please use the following BibTeX entries:
+* Finetuning on TotalText:
+    ```
+    CUDA_VISIBLE_DEVICES=0,1,2,3 python tools/train_net.py \
+        --config-file configs/ABINet/TotalText.yaml \
+        --num-gpus 4 \
+        MODEL.WEIGHTS weights/abinet/model_pretrain.pth
+    ```
+
+* Finetuning on CTW1500:
+    ```
+    CUDA_VISIBLE_DEVICES=0,1,2,3 python tools/train_net.py \
+        --config-file configs/ABINet/CTW1500.yaml \
+        --num-gpus 4 \
+        MODEL.WEIGHTS weights/abinet/model_pretrain.pth
+    ```
+
+* Finetuning on ICDAR2015:
+    ```
+    CUDA_VISIBLE_DEVICES=0,1,2,3 python tools/train_net.py \
+        --config-file configs/ABINet/ICDAR2015.yaml \
+        --num-gpus 4 \
+        MODEL.WEIGHTS weights/abinet/model_pretrain.pth
+    ```
+
+
+### Chinese recognition
+* Pretrainining:
+    ```
+    CUDA_VISIBLE_DEVICES=0,1,2,3 python tools/train_net.py \
+        --config-file configs/ABINet/Pretrain-chn.yaml \
+        --num-gpus 4
+    ```
+
+* Finetuning on ReCTS:
+    ```
+    CUDA_VISIBLE_DEVICES=0,1,2,3 python tools/train_net.py \
+        --config-file configs/ABINet/ReCTS.yaml \
+        --num-gpus 4 \
+        MODEL.WEIGHTS weights/abinet/model_pretrain_chn.pth
+    ```
+
+## Evaluation 
+* Evaluate on Totaltext:
+    ```
+    python tools/train_net.py \
+        --config-file configs/ABINet/TotalText.yaml \
+        --eval-only \
+        MODEL.WEIGHTS weights/abinet/model_totaltext.pth
+    ```
+
+* Evaluate on CTW1500:
+    ```
+    python tools/train_net.py \
+        --config-file configs/ABINet/CTW1500.yaml \
+        --eval-only \
+        MODEL.WEIGHTS weights/abinet/model_ctw1500.pth
+    ```
+
+* Evaluate on ICDAR2015:
+    ```
+    python tools/train_net.py \
+        --config-file configs/ABINet/ICDAR2015.yaml \
+        --eval-only \
+        MODEL.WEIGHTS weights/abinet/model_icdar2015.pth
+    ```
+
+* Evaluate on ReCTS:
+    ```
+    python tools/train_net.py \
+        --config-file configs/ABINet/ReCTS.yaml \
+        --eval-only \
+        MODEL.WEIGHTS weights/abinet/model_rects.pth
+    ```
+    For the evaluation of ReCTS, you need to submit the results using the predicted json file in the official website.
+
+## Demo
+* For TotalText
+    ```
+    mkdir -p output/abinet/totaltext-vis
+    python demo/demo.py \
+        --config-file configs/ABINet/TotalText.yaml \
+        --input datasets/totaltext/test_images/* \
+        --output output/abinet/totaltext-vis \
+        --opts MODEL.WEIGHTS weights/abinet/model_totaltext.pth
+    ```
+
+* For CTW1500
+    ```
+    mkdir -p output/abinet/ctw1500-vis
+    python demo/demo.py \
+        --config-file configs/ABINet/CTW1500.yaml \
+        --input datasets/CTW1500/ctwtest_text_image/* \
+        --output output/abinet/ctw1500-vis \
+        --opts MODEL.WEIGHTS weights/abinet/model_ctw1500.pth
+    ```
+
+* For ICDAR2015
+    ```
+    mkdir -p output/abinet/icdar2015-vis
+    python demo/demo.py \
+        --config-file configs/ABINet/ICDAR2015.yaml \
+        --input datasets/icdar2015/test_images/* \
+        --output output/abinet/icdar2015-vis \
+        --opts MODEL.WEIGHTS weights/abinet/model_icdar2015.pth
+    ```
+
+* For ReCTS (Chinese)
+    ```
+    wget https://drive.google.com/file/d/1dcR__ZgV_JOfpp8Vde4FR3bSR-QnrHVo/view?usp=sharing -O simsun.ttc
+    wget https://drive.google.com/file/d/1wqkX2VAy48yte19q1Yn5IVjdMVpLzYVo/view?usp=sharing -O chn_cls_list
+    mkdir -p output/abinet/rects-vis
+    python demo/demo.py \
+        --config-file configs/ABINet/ReCTS.yaml \
+        --input datasets/ReCTS/ReCTS_test_images/* \
+        --output output/abinet/rects-vis \
+        --opts MODEL.WEIGHTS weights/abinet/model_rects.pth
+    ```
+
+## BibTeX
 
 ```BibTeX
 
-@misc{tian2019adelaidet,
-  author =       {Tian, Zhi and Chen, Hao and Wang, Xinlong and Liu, Yuliang and Shen, Chunhua},
-  title =        {{AdelaiDet}: A Toolbox for Instance-level Recognition Tasks},
-  howpublished = {\url{https://git.io/adelaidet}},
-  year =         {2019}
+@ARTICLE{9960802,  
+    author={Fang, Shancheng and Mao, Zhendong and Xie, Hongtao and Wang, Yuxin and Yan, Chenggang and Zhang, Yongdong},  
+    journal={IEEE Transactions on Pattern Analysis and Machine Intelligence},   
+    title={ABINet++: Autonomous, Bidirectional and Iterative Language Modeling for Scene Text Spotting},   
+    year={2022},  
+    volume={},  
+    number={},  
+    pages={1-18},  
+    doi={10.1109/TPAMI.2022.3223908}
+}
+
+@inproceedings{fang2021read,
+    title={Read like humans: Autonomous, bidirectional and iterative language modeling for scene text recognition},
+    author={Fang, Shancheng and Xie, Hongtao and Wang, Yuxin and Mao, Zhendong and Zhang, Yongdong},
+    booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+    pages={7098--7107},
+    year={2021}
 }
 ```
-and relevant publications:
-```BibTeX
 
-@inproceedings{tian2019fcos,
-  title     =  {{FCOS}: Fully Convolutional One-Stage Object Detection},
-  author    =  {Tian, Zhi and Shen, Chunhua and Chen, Hao and He, Tong},
-  booktitle =  {Proc. Int. Conf. Computer Vision (ICCV)},
-  year      =  {2019}
-}
-
-@article{tian2021fcos,
-  title   =  {{FCOS}: A Simple and Strong Anchor-free Object Detector},
-  author  =  {Tian, Zhi and Shen, Chunhua and Chen, Hao and He, Tong},
-  journal =  {IEEE T. Pattern Analysis and Machine Intelligence (TPAMI)},
-  year    =  {2021}
-}
-
-@inproceedings{chen2020blendmask,
-  title     =  {{BlendMask}: Top-Down Meets Bottom-Up for Instance Segmentation},
-  author    =  {Chen, Hao and Sun, Kunyang and Tian, Zhi and Shen, Chunhua and Huang, Yongming and Yan, Youliang},
-  booktitle =  {Proc. IEEE Conf. Computer Vision and Pattern Recognition (CVPR)},
-  year      =  {2020}
-}
-
-@inproceedings{zhang2020MEInst,
-  title     =  {Mask Encoding for Single Shot Instance Segmentation},
-  author    =  {Zhang, Rufeng and Tian, Zhi and Shen, Chunhua and You, Mingyu and Yan, Youliang},
-  booktitle =  {Proc. IEEE Conf. Computer Vision and Pattern Recognition (CVPR)},
-  year      =  {2020}
-}
-
-@inproceedings{liu2020abcnet,
-  title     =  {{ABCNet}: Real-time Scene Text Spotting with Adaptive {B}ezier-Curve Network},
-  author    =  {Liu, Yuliang and Chen, Hao and Shen, Chunhua and He, Tong and Jin, Lianwen and Wang, Liangwei},
-  booktitle =  {Proc. IEEE Conf. Computer Vision and Pattern Recognition (CVPR)},
-  year      =  {2020}
-}
-
-@inproceedings{wang2020solo,
-  title     =  {{SOLO}: Segmenting Objects by Locations},
-  author    =  {Wang, Xinlong and Kong, Tao and Shen, Chunhua and Jiang, Yuning and Li, Lei},
-  booktitle =  {Proc. Eur. Conf. Computer Vision (ECCV)},
-  year      =  {2020}
-}
-
-@inproceedings{wang2020solov2,
-  title     =  {{SOLOv2}: Dynamic and Fast Instance Segmentation},
-  author    =  {Wang, Xinlong and Zhang, Rufeng and Kong, Tao and Li, Lei and Shen, Chunhua},
-  booktitle =  {Proc. Advances in Neural Information Processing Systems (NeurIPS)},
-  year      =  {2020}
-}
-
-@article{tian2019directpose,
-  title   =  {{DirectPose}: Direct End-to-End Multi-Person Pose Estimation},
-  author  =  {Tian, Zhi and Chen, Hao and Shen, Chunhua},
-  journal =  {arXiv preprint arXiv:1911.07451},
-  year    =  {2019}
-}
-
-@inproceedings{tian2020conditional,
-  title     =  {Conditional Convolutions for Instance Segmentation},
-  author    =  {Tian, Zhi and Shen, Chunhua and Chen, Hao},
-  booktitle =  {Proc. Eur. Conf. Computer Vision (ECCV)},
-  year      =  {2020}
-}
-
-@inproceedings{tian2020boxinst,
-  title     =  {{BoxInst}: High-Performance Instance Segmentation with Box Annotations},
-  author    =  {Tian, Zhi and Shen, Chunhua and Wang, Xinlong and Chen, Hao},
-  booktitle =  {Proc. IEEE Conf. Computer Vision and Pattern Recognition (CVPR)},
-  year      =  {2021}
-}
-```
 
 ## License
 
-For academic use, this project is licensed under the 2-clause BSD License - see the LICENSE file for details. For commercial use, please contact [Chunhua Shen](mailto:chhshen@gmail.com).
+This project is only free for academic research purposes.
+
+Feel free to contact fangsc@ustc.edu.cn if you have any questions.

@@ -10,6 +10,18 @@ _C.MODEL.BACKBONE.ANTI_ALIAS = False
 _C.MODEL.RESNETS.DEFORM_INTERVAL = 1
 _C.INPUT.HFLIP_TRAIN = True
 _C.INPUT.CROP.CROP_INSTANCE = True
+_C.INPUT.ROTATE = CN({"ENABLED": False})
+_C.INPUT.ROTATE.PROB = 1.0
+_C.INPUT.ROTATE.ANGLE = (0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330, 360)
+_C.INPUT.ROTATE.TYPE = "choice"
+
+_C.SOLVER.OPTIM = 'SGD'
+_C.SOLVER.V_OPTIM = None
+_C.SOLVER.L_OPTIM = None
+_C.SOLVER.A_OPTIM = None
+_C.SOLVER.V_BASE_LR = None
+_C.SOLVER.L_BASE_LR = None
+_C.SOLVER.A_BASE_LR = None
 
 # ---------------------------------------------------------------------------- #
 # FCOS Head
@@ -98,7 +110,36 @@ _C.MODEL.BATEXT.NUM_CONV = 2
 _C.MODEL.BATEXT.RECOGNITION_LOSS = "ctc"
 _C.MODEL.BATEXT.RECOGNIZER = "attn"
 _C.MODEL.BATEXT.CANONICAL_SIZE = 96  # largest min_size for level 3 (stride=8)
+_C.MODEL.BATEXT.USE_AET = False
+_C.MODEL.BATEXT.AET_THRESH = 0.05 # 5 pixel offsets per 100 pixels
+_C.MODEL.BATEXT.CUSTOM_DICT = "" # Path to the class file.
 
+# ---------------------------------------------------------------------------- #
+# ABINet Options
+# ---------------------------------------------------------------------------- #
+_C.MODEL.ABINET = CN()
+_C.MODEL.ABINET.VISION_LOSS_WEIGHT = 1.0
+_C.MODEL.ABINET.VISION_ONLY = False
+_C.MODEL.ABINET.VISION_CHECKPOINT = None
+_C.MODEL.ABINET.VISION_SEQ_MODELING = 'transformer'
+_C.MODEL.ABINET.VISION_ATTENTION = 'pca'
+_C.MODEL.ABINET.VISION_ATTN_DIM = 64
+_C.MODEL.ABINET.VISION_ITER_SIZE = 1
+_C.MODEL.ABINET.VISION_NUM_MODELING = 3
+_C.MODEL.ABINET.LANGUAGE_LOSS_WEIGHT = 1.0
+_C.MODEL.ABINET.LANGUAGE_ONLY = False
+_C.MODEL.ABINET.LANGUAGE_CHECKPOINT = None
+_C.MODEL.ABINET.LANGUAGE_DIM_MODEL = 512
+_C.MODEL.ABINET.LANGUAGE_NUM_HEAD = 8
+_C.MODEL.ABINET.LANGUAGE_DIM_INNER = 2048
+_C.MODEL.ABINET.LANGUAGE_NUM_LAYER = 4
+_C.MODEL.ABINET.LANGUAGE_AUG_TRAINING = False
+_C.MODEL.ABINET.LANGUAGE_USE_SM = False
+_C.MODEL.ABINET.ALIGNMENT_LOSS_WEIGHT = 1.0
+_C.MODEL.ABINET.ITER_SIZE = 3
+_C.MODEL.ABINET.MODEL_EVAL = 'alignment'
+_C.MODEL.ABINET.MAX_INS_PER_BATCH = 84
+_C.MODEL.ABINET.SOFT_CE = False
 # ---------------------------------------------------------------------------- #
 # BlendMask Options
 # ---------------------------------------------------------------------------- #

@@ -21,9 +21,17 @@ _PREDEFINED_SPLITS_TEXT = {
     "totaltext_val": ("totaltext/test_images", "totaltext/test.json"),
     "ctw1500_word_train": ("CTW1500/ctwtrain_text_image", "CTW1500/annotations/train_ctw1500_maxlen100_v2.json"),
     "ctw1500_word_test": ("CTW1500/ctwtest_text_image","CTW1500/annotations/test_ctw1500_maxlen100.json"),
-    "syntext1_train": ("syntext1/images", "syntext1/annotations/train.json"),
-    "syntext2_train": ("syntext2/images", "syntext2/annotations/train.json"),
-    "mltbezier_word_train": ("mlt2017/images","mlt2017/annotations/train.json"),
+    "syntext1_train": ("syntext1/syntext_word_eng", "syntext1/train.json"),
+    "syntext2_train": ("syntext2/emcs_imgs", "syntext2/train.json"),
+    "mltbezier_word_train": ("mlt2017/MLT_train_images","mlt2017/train.json"),
+    "icdar2015_train": ("icdar2015/train_images", "icdar2015/ic15_train.json"),
+    "icdar2015_test": ("icdar2015/test_images", "icdar2015/ic15_test.json"),
+    "rects_train": ("ReCTS/ReCTS_train_images", "ReCTS/annotations/rects_train.json"),
+    "rects_val": ("ReCTS/ReCTS_val_images", "ReCTS/annotations/rects_val.json"),
+    "rects_test": ("ReCTS/ReCTS_test_images", "ReCTS/annotations/rects_test.json"),
+    "art_train": ("ArT/rename_artimg_train", "ArT/annotations/abcnet_art_train.json"), 
+    "lsvt_train": ("LSVT/rename_lsvtimg_train", "LSVT/annotations/abcnet_lsvt_train.json"), 
+    "chnsyn_train": ("ChnSyn/syn_130k_images", "ChnSyn/annotations/chn_syntext.json"),    
 }
 
 metadata_text = {

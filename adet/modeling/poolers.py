@@ -91,7 +91,7 @@ class TopPooler(ROIPooler):
                  pooler_type,
                  canonical_box_size=224,
                  canonical_level=4,
-                 assign_crit="area",):
+                 assign_crit="area"):
         # to reuse the parent initialization, handle unsupported pooler types
         parent_pooler_type = "ROIAlign" if pooler_type == "BezierAlign" else pooler_type
         super().__init__(output_size, scales, sampling_ratio, parent_pooler_type,

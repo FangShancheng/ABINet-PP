@@ -19,12 +19,13 @@ import logging
 import os
 from collections import OrderedDict
 import torch
-from torch.nn.parallel import DistributedDataParallel
 
 import detectron2.utils.comm as comm
 from detectron2.data import MetadataCatalog, build_detection_train_loader
 from detectron2.engine import DefaultTrainer, default_argument_parser, default_setup, hooks, launch
 from detectron2.utils.events import EventStorage
+from detectron2.config import CfgNode
+
 from detectron2.evaluation import (
     COCOEvaluator,
     COCOPanopticEvaluator,
@@ -38,16 +39,29 @@ from detectron2.modeling import GeneralizedRCNNWithTTA
 from detectron2.utils.logger import setup_logger
 
 from adet.data.dataset_mapper import DatasetMapperWithBasis
+from adet.data.dataset_language import build_train_loader_text
 from adet.config import get_cfg
 from adet.checkpoint import AdetCheckpointer
 from adet.evaluation import TextEvaluator
-
+from adet.utils.comm import AutonomousOptimizer, build_optimizer
 
 class Trainer(DefaultTrainer):
     """
     This is the same Trainer except that we rewrite the
     `build_train_loader`/`resume_or_load` method.
     """
+    def build_optimizer(self, cfg: CfgNode, model: torch.nn.Module) -> torch.optim.Optimizer:
+        if cfg.SOLVER.V_OPTIM and cfg.SOLVER.L_OPTIM and cfg.SOLVER.A_OPTIM:
+            v_optim = build_optimizer(
+                cfg, cfg.SOLVER.V_OPTIM, cfg.SOLVER.V_BASE_LR, model.vision)
+            l_optim = build_optimizer( 
+                cfg, cfg.SOLVER.L_OPTIM, cfg.SOLVER.L_BASE_LR, model.language)
+            a_optim = build_optimizer(
+                cfg, cfg.SOLVER.A_OPTIM, cfg.SOLVER.A_BASE_LR, model.alignment)
+            return AutonomousOptimizer(v_optim, l_optim, a_optim)
+        else:
+            return build_optimizer(cfg, cfg.SOLVER.OPTIM, cfg.SOLVER.BASE_LR, model)
+
     def resume_or_load(self, resume=True):
         if not isinstance(self.checkpointer, AdetCheckpointer):
             # support loading a few other backbones
@@ -99,8 +113,11 @@ class Trainer(DefaultTrainer):
         It calls :func:`detectron2.data.build_detection_train_loader` with a customized
         DatasetMapper, which adds categorical labels as a semantic mask.
         """
-        mapper = DatasetMapperWithBasis(cfg, True)
-        return build_detection_train_loader(cfg, mapper=mapper)
+        if cfg.MODEL.ABINET.LANGUAGE_ONLY:
+            return build_train_loader_text(cfg)
+        else:
+            mapper = DatasetMapperWithBasis(cfg, True)
+            return build_detection_train_loader(cfg, mapper=mapper)
 
     @classmethod
     def build_evaluator(cls, cfg, dataset_name, output_folder=None):

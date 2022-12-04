@@ -135,6 +135,19 @@ class SingleBiFPN(Backbone):
                 {'feat_level': 3, 'inputs_offsets': [3, 5, 10]},
                 {'feat_level': 4, 'inputs_offsets': [4, 11]},
             ]
+        if len(in_channels_list) == 6:
+            self.nodes = [
+                {'feat_level': 4, 'inputs_offsets': [4, 5]},
+                {'feat_level': 3, 'inputs_offsets': [3, 6]},
+                {'feat_level': 2, 'inputs_offsets': [2, 7]},
+                {'feat_level': 1, 'inputs_offsets': [1, 8]},
+                {'feat_level': 0, 'inputs_offsets': [0, 9]},
+                {'feat_level': 1, 'inputs_offsets': [1, 9, 10]},
+                {'feat_level': 2, 'inputs_offsets': [2, 8, 11]},
+                {'feat_level': 3, 'inputs_offsets': [3, 7, 12]},
+                {'feat_level': 4, 'inputs_offsets': [4, 6, 13]},
+                {'feat_level': 5, 'inputs_offsets': [5, 14]},
+            ]
         elif len(in_channels_list) == 3:
             self.nodes = [
                 {'feat_level': 1, 'inputs_offsets': [1, 2]},

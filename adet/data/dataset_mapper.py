@@ -1,6 +1,8 @@
+import os
 import copy
 import logging
 import os.path as osp
+import pickle
 
 import numpy as np
 import torch
@@ -14,9 +16,10 @@ from detectron2.data.dataset_mapper import DatasetMapper
 from detectron2.data.detection_utils import SizeMismatchError
 from detectron2.structures import BoxMode
 
-from .augmentation import RandomCropWithInstance
+from .augmentation import RandomCropWithInstance, RandomCropWithInstanceAR, RandomRotationWithProb
 from .detection_utils import (annotations_to_instances, build_augmentation,
                               transform_instance_annotations)
+from adet.utils.comm import onehot
 
 """
 This file contains the default mapping that's applied to "dataset dicts".
@@ -54,7 +57,7 @@ class DatasetMapperWithBasis(DatasetMapper):
     This caller enables the default Detectron2 mapper to read an additional basis semantic label
     """
 
-    def __init__(self, cfg, is_train=True):
+    def __init__(self, cfg, is_train=True, bigger_height=None):
         super().__init__(cfg, is_train)
 
         # Rebuild augmentations
@@ -66,19 +69,34 @@ class DatasetMapperWithBasis(DatasetMapper):
         if cfg.INPUT.CROP.ENABLED and is_train:
             self.augmentation.insert(
                 0,
-                RandomCropWithInstance(
+                RandomCropWithInstanceAR(
                     cfg.INPUT.CROP.TYPE,
                     cfg.INPUT.CROP.SIZE,
                     cfg.INPUT.CROP.CROP_INSTANCE,
+                    bigger_height,
                 ),
             )
             logging.getLogger(__name__).info(
                 "Cropping used in training: " + str(self.augmentation[0])
             )
+        if cfg.INPUT.ROTATE.ENABLED and is_train:
+            self.augmentation.insert(
+                0,
+                RandomRotationWithProb(
+                    prob=cfg.INPUT.ROTATE.PROB,
+                    angle=cfg.INPUT.ROTATE.ANGLE,
+                    sample_style=cfg.INPUT.ROTATE.TYPE,
+                ),
+            )
+            logging.getLogger(__name__).info(
+                "Rotation used in training: " + str(self.augmentation[0])
+            )
 
         self.basis_loss_on = cfg.MODEL.BASIS_MODULE.LOSS_ON
         self.ann_set = cfg.MODEL.BASIS_MODULE.ANN_SET
         self.boxinst_enabled = cfg.MODEL.BOXINST.ENABLED
+        self.soft_ce = cfg.MODEL.ABINET.SOFT_CE
+        self.voc_size = cfg.MODEL.BATEXT.VOC_SIZE
 
         if self.boxinst_enabled:
             self.use_instance_mask = False
@@ -93,6 +111,7 @@ class DatasetMapperWithBasis(DatasetMapper):
             dict: a format that builtin models in detectron2 accept
         """
         dataset_dict = copy.deepcopy(dataset_dict)  # it will be modified by code below
+        
         # USER: Write your own image loading if it's not from a file
         try:
             image = utils.read_image(
@@ -183,6 +202,9 @@ class DatasetMapperWithBasis(DatasetMapper):
                 annos, image_shape, mask_format=self.instance_mask_format
             )
 
+            if self.soft_ce and instances.text.dim() == 2:
+                # onehot encoding
+                instances.text = onehot(instances.text, self.voc_size + 1).to(torch.float32)
             # After transforms such as cropping are applied, the bounding box may no longer
             # tightly bound the object. As an example, imagine a triangle object
             # [(0,0), (2,0), (0,2)] cropped by a box [(1,0),(2,2)] (XYXY format). The tight

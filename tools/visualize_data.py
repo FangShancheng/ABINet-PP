@@ -16,7 +16,7 @@ from detectron2.utils.visualizer import Visualizer
 
 from adet.config import get_cfg
 from adet.data.dataset_mapper import DatasetMapperWithBasis
-
+from adet.utils.visualizer import TextVisualizer
 
 def setup(args):
     cfg = get_cfg()
@@ -38,6 +38,7 @@ def parse_args(in_args=None):
     parser.add_argument("--config-file", metavar="FILE", help="path to config file")
     parser.add_argument("--output-dir", default="./", help="path to output directory")
     parser.add_argument("--show", action="store_true", help="show output in a window")
+    parser.add_argument("--vis_text", action="store_true", help="show output in a window")
     parser.add_argument(
         "--opts",
         help="Modify config options using the command-line",
@@ -96,6 +97,9 @@ if __name__ == "__main__":
             dicts = filter_images_with_few_keypoints(dicts, 1)
         for dic in tqdm.tqdm(dicts):
             img = utils.read_image(dic["file_name"], "RGB")
-            visualizer = Visualizer(img, metadata=metadata, scale=scale)
+            if args.vis_text:
+                visualizer = TextVisualizer(img, metadata=metadata, scale=scale)
+            else:
+                visualizer = Visualizer(img, metadata=metadata, scale=scale)
             vis = visualizer.draw_dataset_dict(dic)
             output(vis, os.path.basename(dic["file_name"]))

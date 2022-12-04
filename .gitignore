@@ -23,7 +23,7 @@ dist/
 *.npy
 
 # ipython/jupyter notebooks
-*.ipynb
+# *.ipynb
 **/.ipynb_checkpoints/
 
 # Editor temporaries
@@ -54,3 +54,20 @@ demo/performance.py
 demo/demo2.py
 train.sh
 benchmark.sh
+
+datasets/CTW1500
+datasets/mlt2017
+datasets/syntext1
+datasets/syntext2
+datasets/totaltext
+datasets/evaluation
+datasets/icdar2015
+datasets/WikiText-103-n96.csv
+datasets/ArT
+datasets/ChnSyn
+datasets/LSVT
+datasets/ReCTS
+
+workdir*
+build*
+tmp

@@ -3,7 +3,7 @@ import random
 import numpy as np
 from fvcore.transforms import transform as T
 
-from detectron2.data.transforms import RandomCrop, StandardAugInput
+from detectron2.data.transforms import RandomCrop, StandardAugInput, RandomRotation
 from detectron2.structures import BoxMode
 
 
@@ -106,3 +106,46 @@ class RandomCropWithInstance(RandomCrop):
         return gen_crop_transform_with_instance(
             crop_size, image_size, boxes, crop_box=self.crop_instance
         )
+
+class RandomCropWithInstanceAR(RandomCrop):
+    """ Instance-aware cropping.
+    """
+
+    def __init__(self, crop_type, crop_size, crop_instance=True, bigger_height=None):
+        """
+        Args:
+            crop_instance (bool): if False, extend cropping boxes to avoid cropping instances
+        """
+        super().__init__(crop_type, crop_size)
+        self.crop_instance = crop_instance
+        self.input_args = ("image", "boxes")
+        self.bigger_height = bigger_height
+
+    def get_transform(self, img, boxes):
+        image_size = img.shape[:2]
+        num_tries = 0
+        while True:
+            crop_size = self.get_crop_size(image_size)
+            if self.bigger_height is None: break
+            if self.bigger_height is True and crop_size[0] >= crop_size[1]: break
+            if self.bigger_height is False and crop_size[0] < crop_size[1]: break
+            if num_tries > 10000:
+                raise ValueError("Cannot finished get crop size within 10000 tries")
+            num_tries += 1
+        return gen_crop_transform_with_instance(
+            crop_size, image_size, boxes, crop_box=self.crop_instance
+        )
+
+
+class RandomRotationWithProb(RandomRotation):
+
+    def __init__(self, prob, angle, expand=True, center=None, sample_style="range", interp=None):
+        super().__init__(angle, expand, center, sample_style, interp)
+        self.prob = prob
+
+    def get_transform(self, image):
+        prob = random.random()
+        if prob <= self.prob:
+            return super().get_transform(image)
+        else:
+            return T.NoOpTransform()

@@ -1,0 +1,54 @@
+_BASE_: "Base-ABINet.yaml"
+DATASETS:
+  TRAIN: ("chnsyn_train", "rects_train", "rects_val", "lsvt_train", "art_train", ) 
+  TEST: ("rects_test", )
+MODEL:
+  META_ARCHITECTURE: "ABINetIterModel"
+  BACKBONE:
+    NAME: "build_fcos_resnet_bifpn_backbone"
+  BiFPN:
+    IN_FEATURES: ["res2", "res3", "res4", "res5"]
+    OUT_CHANNELS: 256
+    NUM_REPEATS: 2
+    NORM: "SyncBN"
+  WEIGHTS: "detectron2://ImageNetPretrained/MSRA/R-50.pkl"
+  ABINET:
+    VISION_LOSS_WEIGHT: 1.0
+    LANGUAGE_LOSS_WEIGHT: 1.0
+    LANGUAGE_DIM_MODEL: 512
+    LANGUAGE_NUM_HEAD: 8
+    LANGUAGE_DIM_INNER: 2048
+    LANGUAGE_NUM_LAYER: 4
+    LANGUAGE_AUG_TRAINING: False  # PAY ATTENTION
+    LANGUAGE_USE_SM: True
+    ALIGNMENT_LOSS_WEIGHT: 1.0
+    MAX_INS_PER_BATCH: 384
+    VISION_SEQ_MODELING: 'resnet'
+    VISION_ATTENTION: 'pca'
+    VISION_ITER_SIZE: 3    
+    VISION_NUM_MODELING: 4
+    VISION_ATTN_DIM: 256
+    ITER_SIZE: 3
+  BATEXT:
+    USE_AET: True
+    AET_THRESH: 0.05
+    VOC_SIZE: 5462
+    CUSTOM_DICT: "chn_cls_list"    
+  FCOS:
+    YIELD_PROPOSAL: True 
+    INFERENCE_TH_TRAIN: 0.7  # PAY ATTENTION 0.4
+SOLVER:
+  IMS_PER_BATCH: 8
+  STEPS: (500000, 700000)
+  MAX_ITER: 900000
+  CHECKPOINT_PERIOD: 10000
+  V_OPTIM: "SGD"
+  V_BASE_LR: 0.01
+  L_OPTIM: "Adam"
+  L_BASE_LR: 0.0001
+  A_OPTIM: "Adam"
+  A_BASE_LR: 0.0001
+INPUT:
+  CROP:
+    ENABLED: False  
+OUTPUT_DIR: "output/abinet/pretrain-chn"
