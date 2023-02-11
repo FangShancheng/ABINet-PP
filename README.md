@@ -50,8 +50,8 @@ datasets
     - [model_totaltext.pth](https://drive.google.com/file/d/1hT5uZDnQAfPK2T-Ef6pBYoJj1iidqxGh/view?usp=share_link)
 
 - Chinese recognition:
-    - [model_pretrain_chn.pth](https://drive.google.com/file/d/1p6Pw053fFtwmOWd7Qiw3w4qYKf13-bDg/view?usp=share_link)
-    - [model_rects.pth](https://drive.google.com/file/d/1hT5uZDnQAfPK2T-Ef6pBYoJj1iidqxGh/view?usp=share_link)
+    - [model_pretrain_chn.pth](https://drive.google.com/file/d/15Qc-HyXtadxq5lfXW8vzmkhXKWi_VLgt/view?usp=share_link)
+    - [model_rects.pth](https://drive.google.com/file/d/1dnqRx1Xa3Vof6VcDw3Wz4vn7eeWvGF3r/view?usp=share_link)
 
 
 ## Training
